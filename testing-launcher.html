@@ -70,22 +70,19 @@
 
     // Helpers
     const loadLauncherJsonFile = (callback) => {
-      let xobj = new XMLHttpRequest();
-      xobj.overrideMimeType("application/json");
-      xobj.open('GET', '/testing-launcher.json', true);
-
-      xobj.onreadystatechange = () => {
-        const settings = JSON.parse(xobj.responseText)
-        callback(settings)
-      };
-      xobj.send(null);
+      fetch('/testing-launcher.json', {
+        method: 'GET',
+        headers: headers
+      })
+        .then(r => r.json())
+        .then(callback)
     }
 
     var wasCalledAlready = false
     const getLauncherUrl = (settings, callback) => {
       if (wasCalledAlready) { return }
       wasCalledAlready = true
-      
+
       const username = settings.username
       const password = settings.password
       const gameSlug = settings.gameSlug
